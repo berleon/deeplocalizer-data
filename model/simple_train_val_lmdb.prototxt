@@ -1,16 +1,15 @@
 name: "Deeplocalizer"
 layer {
   name: "data"
-  type: "ImageData"
+  type: "data"
   top: "data"
   top: "label"
   include {
     phase: TRAIN
   }
-  image_data_param {
-    source: "data-images/train/train.txt"
+  data_param {
+    source: "data/train/"
     batch_size: 256
-    shuffle: true
   }
   transform_param {
     # feature scaling coefficient: this maps the [0, 255]  data to [0, 1]
@@ -19,16 +18,15 @@ layer {
 }
 layer {
   name: "data"
-  type: "ImageData"
+  type: "data"
   top: "data"
   top: "label"
   include {
     phase: TEST
   }
-  image_data_param {
-    source: "data-images/validation/validation.txt"
+  data_param {
+    source: "data/validation/"
     batch_size: 50
-    shuffle: true
   }
   transform_param {
     # feature scaling coefficient: this maps the [0, 255]  data to [0, 1]
