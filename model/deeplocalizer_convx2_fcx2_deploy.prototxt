@@ -1,40 +1,11 @@
 name: "Deeplocalizer"
-layer {
-  name: "data"
-  type: "ImageData"
-  top: "data"
-  top: "label"
-  include {
-    phase: TRAIN
-  }
-  image_data_param {
-    source: "data-images/train/train.txt"
-    batch_size: 256
-    shuffle: true
-  }
-  transform_param {
-    # feature scaling coefficient: this maps the [0, 255]  data to [0, 1]
-    scale: 0.00390625
-  }
-}
-layer {
-  name: "data"
-  type: "ImageData"
-  top: "data"
-  top: "label"
-  include {
-    phase: TEST
-  }
-  image_data_param {
-    source: "data-images/validation/validation.txt"
-    batch_size: 50
-    shuffle: true
-  }
-  transform_param {
-    # feature scaling coefficient: this maps the [0, 255]  data to [0, 1]
-    scale: 0.00390625
-  }
-}
+input: "data"
+input_dim: 256
+input_dim: 1
+input_dim: 100
+input_dim: 100
+
+
 layer {
   name: "conv1"
   type: "Convolution"
@@ -155,15 +126,6 @@ layer {
   top: "fc3"
 }
 layer {
-  name: "drop3"
-  type: "Dropout"
-  bottom: "fc3"
-  top: "fc3"
-  dropout_param {
-    dropout_ratio: 0.5
-  }
-}
-layer {
   name: "fc4"
   type: "InnerProduct"
   bottom: "fc3"
@@ -189,19 +151,8 @@ layer {
   }
 }
 layer {
-  name: "accuracy"
-  type: "Accuracy"
+  name: "prob"
+  type: "Softmax"
   bottom: "fc4"
-  bottom: "label"
-  top: "accuracy"
-  include {
-    phase: TEST
-  }
-}
-layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
-  bottom: "fc4"
-  bottom: "label"
-  top: "loss"
+  top: "prob"
 }
